@@ -1,34 +1,51 @@
 package model;
 
-import javafx.beans.property.*;
-
 public class Promo {
+	private int idPromo;
+    private String code;
+    private String headline;
+    private double discountPercentage;
 
-    private StringProperty idPromo;
-    private StringProperty code;
-    private StringProperty headline;
-    private DoubleProperty discountPercentage;
+    public Promo() {}
 
-    public Promo() {
-        this.idPromo = new SimpleStringProperty();
-        this.code = new SimpleStringProperty();
-        this.headline = new SimpleStringProperty();
-        this.discountPercentage = new SimpleDoubleProperty();
+    public Promo(int idPromo, String code, String headline, double discountPercentage) {
+        this.idPromo = idPromo;
+        this.code = code;
+        this.headline = headline;
+        this.discountPercentage = discountPercentage;
     }
 
-    public String getIdPromo() { return idPromo.get(); }
-    public void setIdPromo(String value) { idPromo.set(value); }
-    public StringProperty idPromoProperty() { return idPromo; }
+	public int getIdPromo() {
+		return idPromo;
+	}
 
-    public String getCode() { return code.get(); }
-    public void setCode(String value) { code.set(value); }
-    public StringProperty codeProperty() { return code; }
+	public void setIdPromo(int idPromo) {
+		this.idPromo = idPromo;
+	}
 
-    public String getHeadline() { return headline.get(); }
-    public void setHeadline(String value) { headline.set(value); }
-    public StringProperty headlineProperty() { return headline; }
+	public String getCode() {
+		return code;
+	}
 
-    public double getDiscountPercentage() { return discountPercentage.get(); }
-    public void setDiscountPercentage(double value) { discountPercentage.set(value); }
-    public DoubleProperty discountPercentageProperty() { return discountPercentage; }
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getHeadline() {
+		return headline;
+	}
+
+	public void setHeadline(String headline) {
+		this.headline = headline;
+	}
+
+	public double getDiscountPercentage() {
+		return discountPercentage;
+	}
+
+	public void setDiscountPercentage(double discountPercentage) {
+		this.discountPercentage = discountPercentage;
+	}
+    
+    
 }

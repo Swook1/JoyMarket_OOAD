@@ -1,19 +1,16 @@
 package model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-
 public class Customer extends User {
+    private double balance;
 
-    private DoubleProperty balance;
+    public Customer() {}
 
-    public Customer() {
-        super();
-        this.balance = new SimpleDoubleProperty();
-        setRole("Customer"); 
+    public Customer(int idUser, String fullName, String email, String password,
+                    String phone, String address, String role, double balance) {
+        super(idUser, fullName, email, password, phone, address, role);
+        this.balance = balance;
     }
 
-    public double getBalance() { return balance.get(); }
-    public void setBalance(double value) { balance.set(value); }
-    public DoubleProperty balanceProperty() { return balance; }
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
 }
