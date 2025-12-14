@@ -1,47 +1,64 @@
 package model;
 
-import javafx.beans.property.*;
-import java.util.Date;
+import java.sql.Date;
 
 public class OrderHeader {
+	private int idOrder;
+    private int idCustomer;
+    private int idPromo;
+    private String status;
+    private Date orderDate;
 
-    private StringProperty idOrder;
-    private StringProperty idCustomer;
-    private StringProperty idPromo;
-    private StringProperty status;
-    private ObjectProperty<Date> orderedAt;
-    private DoubleProperty totalAmount;
+    public OrderHeader() {}
 
-    public OrderHeader() {
-        this.idOrder = new SimpleStringProperty();
-        this.idCustomer = new SimpleStringProperty();
-        this.idPromo = new SimpleStringProperty();
-        this.status = new SimpleStringProperty();
-        this.orderedAt = new SimpleObjectProperty<>();
-        this.totalAmount = new SimpleDoubleProperty();
+    public OrderHeader(int idOrder, int idCustomer, int idPromo,
+                       String status, Date orderDate) {
+        this.idOrder = idOrder;
+        this.idCustomer = idCustomer;
+        this.idPromo = idPromo;
+        this.status = status;
+        this.orderDate = orderDate;
     }
 
-    public String getIdOrder() { return idOrder.get(); }
-    public void setIdOrder(String value) { idOrder.set(value); }
-    public StringProperty idOrderProperty() { return idOrder; }
+	public int getIdOrder() {
+		return idOrder;
+	}
 
-    public String getIdCustomer() { return idCustomer.get(); }
-    public void setIdCustomer(String value) { idCustomer.set(value); }
-    public StringProperty idCustomerProperty() { return idCustomer; }
+	public void setIdOrder(int idOrder) {
+		this.idOrder = idOrder;
+	}
 
-    public String getIdPromo() { return idPromo.get(); }
-    public void setIdPromo(String value) { idPromo.set(value); }
-    public StringProperty idPromoProperty() { return idPromo; }
+	public int getIdCustomer() {
+		return idCustomer;
+	}
 
-    public String getStatus() { return status.get(); }
-    public void setStatus(String value) { status.set(value); }
-    public StringProperty statusProperty() { return status; }
+	public void setIdCustomer(int idCustomer) {
+		this.idCustomer = idCustomer;
+	}
 
-    public Date getOrderedAt() { return orderedAt.get(); }
-    public void setOrderedAt(Date value) { orderedAt.set(value); }
-    public ObjectProperty<Date> orderedAtProperty() { return orderedAt; }
+	public int getIdPromo() {
+		return idPromo;
+	}
 
-    public double getTotalAmount() { return totalAmount.get(); }
-    public void setTotalAmount(double value) { totalAmount.set(value); }
-    public DoubleProperty totalAmountProperty() { return totalAmount; }
+	public void setIdPromo(int idPromo) {
+		this.idPromo = idPromo;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+    
+    
 }

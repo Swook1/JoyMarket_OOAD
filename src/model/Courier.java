@@ -1,31 +1,22 @@
 package model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+public class Courier extends User{
+	private String vehicleType;
+    private String vehiclePlate;
 
-public class Courier extends User {
+    public Courier() {}
 
-    private StringProperty idCourier;
-    private StringProperty vehicleType;
-    private StringProperty vehiclePlate;
-
-    public Courier() {
-        super();
-        this.idCourier = new SimpleStringProperty();
-        this.vehicleType = new SimpleStringProperty();
-        this.vehiclePlate = new SimpleStringProperty();
-        setRole("Courier");
+    public Courier(int idUser, String fullName, String email, String password,
+                   String phone, String address, String role,
+                   String vehicleType, String vehiclePlate) {
+        super(idUser, fullName, email, password, phone, address, role);
+        this.vehicleType = vehicleType;
+        this.vehiclePlate = vehiclePlate;
     }
 
-    public String getIdCourier() { return idCourier.get(); }
-    public void setIdCourier(String value) { idCourier.set(value); }
-    public StringProperty idCourierProperty() { return idCourier; }
+    public String getVehicleType() { return vehicleType; }
+    public void setVehicleType(String vehicleType) { this.vehicleType = vehicleType; }
 
-    public String getVehicleType() { return vehicleType.get(); }
-    public void setVehicleType(String value) { vehicleType.set(value); }
-    public StringProperty vehicleTypeProperty() { return vehicleType; }
-
-    public String getVehiclePlate() { return vehiclePlate.get(); }
-    public void setVehiclePlate(String value) { vehiclePlate.set(value); }
-    public StringProperty vehiclePlateProperty() { return vehiclePlate; }
+    public String getVehiclePlate() { return vehiclePlate; }
+    public void setVehiclePlate(String vehiclePlate) { this.vehiclePlate = vehiclePlate; }
 }

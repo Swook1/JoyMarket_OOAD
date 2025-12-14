@@ -1,53 +1,84 @@
 package model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class User {
 
-    private StringProperty idUser;
-    private StringProperty fullName;
-    private StringProperty email;
-    private StringProperty password;
-    private StringProperty phone;
-    private StringProperty address;
-    private StringProperty role;
+	private int idUser;
+    private String fullName;
+    private String email;
+    private String password;
+    private String phone;
+    private String address;
+    private String role;
+    
+    public User() {}
+    
+	public User(int idUser, String fullName, String email, String password, String phone, String address, String role) {
+		super();
+		this.idUser = idUser;
+		this.fullName = fullName;
+		this.email = email;
+		this.password = password;
+		this.phone = phone;
+		this.address = address;
+		this.role = role;
+	}
 
-    public User() {
-        this.idUser = new SimpleStringProperty();
-        this.fullName = new SimpleStringProperty();
-        this.email = new SimpleStringProperty();
-        this.password = new SimpleStringProperty();
-        this.phone = new SimpleStringProperty();
-        this.address = new SimpleStringProperty();
-        this.role = new SimpleStringProperty();
-    }
+	public int getIdUser() {
+		return idUser;
+	}
 
-    public String getIdUser() { return idUser.get(); }
-    public void setIdUser(String value) { idUser.set(value); }
-    public StringProperty idUserProperty() { return idUser; }
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
 
-    public String getFullName() { return fullName.get(); }
-    public void setFullName(String value) { fullName.set(value); }
-    public StringProperty fullNameProperty() { return fullName; }
+	public String getFullName() {
+		return fullName;
+	}
 
-    public String getEmail() { return email.get(); }
-    public void setEmail(String value) { email.set(value); }
-    public StringProperty emailProperty() { return email; }
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-    public String getPassword() { return password.get(); }
-    public void setPassword(String value) { password.set(value); }
-    public StringProperty passwordProperty() { return password; }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getPhone() { return phone.get(); }
-    public void setPhone(String value) { phone.set(value); }
-    public StringProperty phoneProperty() { return phone; }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getAddress() { return address.get(); }
-    public void setAddress(String value) { address.set(value); }
-    public StringProperty addressProperty() { return address; }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getRole() { return role.get(); }
-    public void setRole(String value) { role.set(value); }
-    public StringProperty roleProperty() { return role; }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	} 
+    
+    
+
 }
