@@ -41,7 +41,6 @@ public class LoginView {
 
             if (user != null) {
                 messageLabel.setText("Login success!");
-
                 if (user.getRole().equalsIgnoreCase("Customer")) {
                     CustomerDAO customerDAO = new CustomerDAO();
                     Customer customer = customerDAO.getCustomer(user.getIdUser());
@@ -49,6 +48,14 @@ public class LoginView {
                     if (customer != null) {
                         new CustomerDashboardView(stage, customer);
                     }
+                }
+                else if (user.getRole().equalsIgnoreCase("Admin")) {
+                    // Arahkan ke Admin Dashboard
+                    new AdminDashboardView(stage, user);
+                } 
+                else if (user.getRole().equalsIgnoreCase("Courier")) {
+                    // Arahkan ke Courier Dashboard
+                    new CourierDashboardView(stage, user);
                 }
 
             } else {

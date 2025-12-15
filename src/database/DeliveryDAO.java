@@ -9,23 +9,22 @@ import model.*;
 
 public class DeliveryDAO {
 	public boolean createDelivery(int idOrder, int idCourier) {
-        String sql = "INSERT INTO Delivery VALUES (?, ?, ?, ?)";
+	    String sql = "INSERT INTO Delivery (idOrder, idCourier, status) VALUES (?, ?, ?)";
 
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, 1);
-            ps.setInt(2, idOrder);
-            ps.setInt(3, idCourier);
-            ps.setString(4, "Unfinished");
+	        ps.setInt(1, idOrder);
+	        ps.setInt(2, idCourier);
+	        ps.setString(3, "Pending");
 
-            return ps.executeUpdate() > 0;
+	        return ps.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
 	
 	public boolean editDeliveryStatus(int idOrder, int idCourier, String status) {
         String sql = "UPDATE Delivery SET status = ? WHERE idOrder = ? AND idCourier = ?";
