@@ -94,4 +94,22 @@ public class OrderHeaderDAO {
 
 	    return null;
 	}
+	
+	public boolean updateStatus(int idOrder, String newStatus) {
+	    // Pastikan nama tabel sesuai DB lu (orderheader atau orderheaders)
+	    String sql = "UPDATE orderheader SET status = ? WHERE idOrder = ?";
+
+	    try (java.sql.Connection con = DBConnection.getConnection();
+	         java.sql.PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setString(1, newStatus);
+	        ps.setInt(2, idOrder);
+
+	        return ps.executeUpdate() > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
 }

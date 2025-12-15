@@ -46,4 +46,27 @@ public class ProductDAO {
         }
         return false;
     }
+	
+	public java.util.ArrayList<Product> getAllProducts() {
+	    java.util.ArrayList<Product> productList = new java.util.ArrayList<>();
+	    String sql = "SELECT * FROM products";
+
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            productList.add(new Product(
+	                rs.getInt("idProduct"),
+	                rs.getString("name"),
+	                rs.getDouble("price"),
+	                rs.getInt("stock"),
+	                rs.getString("category")
+	            ));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return productList;
+	}
 }
