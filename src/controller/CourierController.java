@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+
 import database.DeliveryDAO;
+import model.Delivery;
 
 public class CourierController {
 
@@ -39,4 +42,9 @@ public class CourierController {
             return "Failed to update status.";
         }
     }
+    
+    public ArrayList<Delivery> getDeliveriesByCourier(int idCourier) {
+        return deliveryDAO.getDeliveriesByCourier(idCourier);
+    }
+
 }

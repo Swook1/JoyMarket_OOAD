@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.*;
+import java.util.ArrayList;
 
 import model.*;
 
@@ -68,4 +69,36 @@ public class DeliveryDAO {
         }
         return null;
     }
+	
+	public ArrayList<Delivery> getDeliveriesByCourier(int idCourier) {
+	    ArrayList<Delivery> list = new ArrayList<>();
+
+	    String sql = "SELECT * FROM delivery WHERE idCourier = ?";
+
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, idCourier);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            Delivery d = new Delivery(
+	                rs.getInt("idDelivery"),
+	                rs.getInt("idOrder"),
+	                rs.getInt("idCourier"),
+	                rs.getString("status")
+	            );
+	            list.add(d);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
+	}
+
+
+
+
 }
