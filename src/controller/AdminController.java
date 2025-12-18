@@ -1,8 +1,13 @@
 package controller;
 
+import java.util.ArrayList;
+
+import database.CourierDAO;
 import database.DeliveryDAO;
 import database.OrderHeaderDAO;
 import database.ProductDAO;
+import model.Courier;
+import model.OrderHeader;
 import model.Product;
 
 /*
@@ -15,6 +20,7 @@ public class AdminController {
     private ProductDAO productDAO;
     private DeliveryDAO deliveryDAO;
     private OrderHeaderDAO orderHeaderDAO = new OrderHeaderDAO();
+    private CourierDAO courierDAO = new CourierDAO();
 
     public AdminController() {
         productDAO = new ProductDAO();
@@ -74,5 +80,15 @@ public class AdminController {
     
     public java.util.ArrayList<Product> getAllProducts() {
         return productDAO.getAllProducts();
+    }
+    
+    // Ambil semua order yang belum di-assign courier
+    public ArrayList<OrderHeader> getAllUnassignedOrders() {
+        return orderHeaderDAO.getAllUnassignedOrders();
+    }
+    
+    // Ambil semua courier
+    public ArrayList<Courier> getAllCouriers() {
+        return courierDAO.getAllCouriers();
     }
 }

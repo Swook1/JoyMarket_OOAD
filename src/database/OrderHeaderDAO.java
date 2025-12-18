@@ -2,6 +2,7 @@ package database;
 
 import java.sql.*;
 import java.time.*;
+import java.util.ArrayList;
 
 import model.*;
 
@@ -12,16 +13,19 @@ import model.*;
 public class OrderHeaderDAO {
 	// Bikin order header baru
 	public boolean createOrder(int idCustomer, int idPromo) {
-        String sql = "INSERT INTO OrderHeader VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO OrderHeader(idCustomer, idPromo, status, orderDate) VALUES (?, ?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, 1);
-            ps.setInt(2, idCustomer);
-            ps.setInt(3, idPromo);
-            ps.setString(4, "Unfinished");
-            ps.setDate(5, java.sql.Date.valueOf(LocalDate.now()));
+            ps.setInt(1, idCustomer);
+            if (idPromo == 0) {
+	            ps.setNull(2, Types.INTEGER);
+	        } else {
+	            ps.setInt(2, idPromo);
+	        }
+            ps.setString(3, "Unfinished");
+            ps.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
 
             return ps.executeUpdate() > 0;
 
@@ -30,6 +34,37 @@ public class OrderHeaderDAO {
         }
         return false;
     }
+	
+	// Bikin order header baru dan return ID yang baru dibuat
+	public int createOrderAndGetId(int idCustomer, int idPromo) {
+	    String sql = "INSERT INTO OrderHeader(idCustomer, idPromo, status, orderDate) VALUES (?, ?, ?, ?)";
+	    
+	    
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	        ps.setInt(1, idCustomer);
+	        if (idPromo == 0) {
+	            ps.setNull(2, Types.INTEGER);
+	        } else {
+	            ps.setInt(2, idPromo);
+	        }
+	        ps.setString(3, "Unfinished");
+	        ps.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
+
+	        ps.executeUpdate();
+
+	        ResultSet rs = ps.getGeneratedKeys();
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return -1;
+	}
+
 	
 	// Update status order (Unfinished -> Pending -> Delivered, dll)
 	public boolean editOrderHeaderStatus(int idOrder, String status) {
@@ -119,5 +154,32 @@ public class OrderHeaderDAO {
 	        e.printStackTrace();
 	    }
 	    return false;
+	}
+	
+	// Ambil semua order yang belum di-assign courier (untuk admin assign)
+	public ArrayList<OrderHeader> getAllUnassignedOrders() {
+	    ArrayList<OrderHeader> list = new ArrayList<>();
+	    String sql = "SELECT * FROM OrderHeader WHERE status = 'Unfinished'";
+
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            OrderHeader order = new OrderHeader(
+	                rs.getInt("idOrder"),
+	                rs.getInt("idCustomer"),
+	                rs.getInt("idPromo"),
+	                rs.getString("status"),
+	                rs.getDate("orderDate")
+	            );
+	            list.add(order);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
 	}
 }

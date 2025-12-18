@@ -97,6 +97,22 @@ public class CustomerDAO {
 
 	    return false;
 	}
-
-
+	
+	// Update balance customer (untuk checkout - mengurangi balance)
+	public boolean updateBalance(int id, double newBalance) {
+		String query = "UPDATE customers SET balance = ? WHERE idCustomer = ?";
+		try {
+			Connection con = DBConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setDouble(1, newBalance);
+			ps.setInt(2, id);
+			
+			int rowsAffected = ps.executeUpdate();
+			return rowsAffected > 0;
+		} catch (SQLException e) {
+			System.out.println("Update balance failed!");
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

@@ -40,7 +40,8 @@ public class CourierController {
         boolean isSuccess = deliveryDAO.editDeliveryStatus(idOrder, idCourier, newStatus);
 
         if (isSuccess) {
-            return "Success update delivery status!";
+        	System.out.println("Delivery status updated to Delivered.");
+        	return "Success update delivery status!";
         } else {
             return "Failed to update status.";
         }

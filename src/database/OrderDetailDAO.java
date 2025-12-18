@@ -11,10 +11,10 @@ import model.*;
   Order detail isinya produk-produk apa aja yang dibeli di sebuah order
  */
 public class OrderDetailDAO {
-
+	
 	// Bikin order detail baru (produk yang dibeli & qty)
 	public boolean createOrderDetail(int idOrder, int idProduct, int qty) {
-        String sql = "INSERT INTO orderdetail VALUES (?, ?, ?)";
+        String sql = "INSERT INTO orderdetail(idOrder, idProduct, qty) VALUES (?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -44,6 +44,7 @@ public class OrderDetailDAO {
 
             if (rs.next()) {
                 return new OrderDetail(
+                		rs.getInt("idOrderDetail"),
                         rs.getInt("idOrder"),
                         rs.getInt("idProduct"),
                         rs.getInt("qty")

@@ -6,18 +6,27 @@ package model;
   Nyimpen produk apa aja yang dibeli dan berapa qty nya
  */
 public class OrderDetail {
+	private int idOrderDetail; // unique identifier untuk order detail
 	private int idOrder;     // order mana yang punya detail ini
     private int idProduct;   // produk apa yang dibeli
     private int qty;         // jumlah produk yang dibeli
 
     public OrderDetail() {}
 
-    public OrderDetail(int idOrder, int idProduct, int qty) {
+    public OrderDetail(int idOrderDetail, int idOrder, int idProduct, int qty) {
+    	this.idOrderDetail = idOrderDetail;
         this.idOrder = idOrder;
         this.idProduct = idProduct;
         this.qty = qty;
     }
-
+	public int getIdOrderDetail() {
+		return idOrderDetail;
+	}
+	
+	public void setIdOrderDetail(int idOrderDetail) {
+		this.idOrderDetail = idOrderDetail;
+	}
+	
 	public int getIdOrder() {
 		return idOrder;
 	}

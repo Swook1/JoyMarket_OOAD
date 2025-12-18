@@ -3,6 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import model.*;
 
@@ -48,5 +49,39 @@ public class CourierDAO {
 	    }
 
 	    return null;
+	}
+	
+	// Ambil semua courier dari database
+	public ArrayList<Courier> getAllCouriers() {
+	    ArrayList<Courier> list = new ArrayList<>();
+	    
+	    String sql = "SELECT u.idUser, u.fullName, u.email, u.password, u.phone, u.address, u.role, c.vehicleType, c.vehiclePlate " +
+	    	    "FROM users u JOIN couriers c ON u.idUser = c.idCourier";
+
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            Courier courier = new Courier(
+	                rs.getInt("idUser"),
+	                rs.getString("fullName"),
+	                rs.getString("email"),
+	                rs.getString("password"),
+	                rs.getString("phone"),
+	                rs.getString("address"),
+	                rs.getString("role"),
+	                rs.getString("vehicleType"),
+	                rs.getString("vehiclePlate")
+	            );
+	            list.add(courier);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
 	}
 }

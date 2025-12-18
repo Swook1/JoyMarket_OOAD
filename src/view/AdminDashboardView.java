@@ -10,6 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import model.Courier;
+import model.OrderHeader;
 import model.Product;
 import model.User;
 
@@ -25,7 +28,10 @@ public class AdminDashboardView {
     private AdminController adminController;
     
     private TableView<Product> tableProduct;
-    private TextField stockField; 
+    private TextField stockField;
+    
+    private TableView<OrderHeader> tableOrder;
+    private ComboBox<Courier> courierCombo; 
 
     public AdminDashboardView(Stage stage, User admin) {
         this.stage = stage;
@@ -168,53 +174,103 @@ public class AdminDashboardView {
         Label title = new Label("Assign Order to Courier");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         
-        Label info = new Label("Use this form to assign a courier to an existing order.");
+        Label info = new Label("Select an order from the table and assign a courier.");
         
-        // Form Input
-        TextField orderIdField = new TextField();
-        orderIdField.setPromptText("Order ID");
-        orderIdField.setMaxWidth(300);
+        // ===== TABLE ORDER =====
+        tableOrder = new TableView<>();
         
-        TextField courierIdField = new TextField();
-        courierIdField.setPromptText("Courier ID");
-        courierIdField.setMaxWidth(300);
+        TableColumn<OrderHeader, Integer> colOrderId = new TableColumn<>("Order ID");
+        colOrderId.setCellValueFactory(new PropertyValueFactory<>("idOrder"));
+        colOrderId.setPrefWidth(80);
+        
+        TableColumn<OrderHeader, Integer> colCustomerId = new TableColumn<>("Customer ID");
+        colCustomerId.setCellValueFactory(new PropertyValueFactory<>("idCustomer"));
+        colCustomerId.setPrefWidth(100);
+        
+        TableColumn<OrderHeader, String> colStatus = new TableColumn<>("Status");
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colStatus.setPrefWidth(100);
+        
+        TableColumn<OrderHeader, java.sql.Date> colDate = new TableColumn<>("Order Date");
+        colDate.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
+        colDate.setPrefWidth(120);
+        
+        tableOrder.getColumns().addAll(colOrderId, colCustomerId, colStatus, colDate);
+        refreshOrderTable();
+        
+        // ===== FORM ASSIGN =====
+        HBox formBox = new HBox(10);
+        formBox.setPadding(new Insets(10, 0, 0, 0));
+        
+        courierCombo = new ComboBox<>();
+        courierCombo.setPromptText("Select Courier");
+        courierCombo.setPrefWidth(250);
+        
+        // Set converter untuk menampilkan nama courier di ComboBox
+        courierCombo.setConverter(new StringConverter<Courier>() {
+            @Override
+            public String toString(Courier courier) {
+                if (courier == null) return null;
+                return courier.getIdUser() + " - " + courier.getFullName() + " (" + courier.getVehicleType() + ")";
+            }
+            
+            @Override
+            public Courier fromString(String string) {
+                return null;
+            }
+        });
+        
+        // Load couriers ke ComboBox
+        refreshCourierCombo();
         
         Button assignBtn = new Button("Assign Courier");
         Label msgLabel = new Label();
         
         assignBtn.setOnAction(e -> {
-            try {
-                if (orderIdField.getText().isEmpty() || courierIdField.getText().isEmpty()) {
-                    msgLabel.setText("All fields must be filled!");
-                    msgLabel.setStyle("-fx-text-fill: red;");
-                    return;
-                }
-
-                int idOrder = Integer.parseInt(orderIdField.getText());
-                int idCourier = Integer.parseInt(courierIdField.getText());
-                
-                String res = adminController.assignCourierToOrder(idOrder, idCourier);
-                msgLabel.setText(res);
-                
-                if (res.startsWith("Success")) {
-                    msgLabel.setStyle("-fx-text-fill: green;");
-                    orderIdField.clear();
-                    courierIdField.clear();
-                } else {
-                    msgLabel.setStyle("-fx-text-fill: red;");
-                }
-                
-            } catch (NumberFormatException ex) {
-                msgLabel.setText("ID must be numeric!");
+            OrderHeader selectedOrder = tableOrder.getSelectionModel().getSelectedItem();
+            Courier selectedCourier = courierCombo.getValue();
+            
+            // Validasi
+            if (selectedOrder == null) {
+                msgLabel.setText("Please select an order from the table!");
+                msgLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+            
+            if (selectedCourier == null) {
+                msgLabel.setText("Please select a courier!");
+                msgLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+            
+            // Panggil Controller
+            String res = adminController.assignCourierToOrder(
+                selectedOrder.getIdOrder(), 
+                selectedCourier.getIdUser()
+            );
+            msgLabel.setText(res);
+            
+            if (res.startsWith("Success")) {
+                msgLabel.setStyle("-fx-text-fill: green;");
+                refreshOrderTable(); // Refresh table setelah assign
+                courierCombo.setValue(null);
+            } else {
                 msgLabel.setStyle("-fx-text-fill: red;");
             }
         });
 
-        layout.getChildren().addAll(title, info, 
-            new Label("Order ID:"), orderIdField, 
-            new Label("Courier ID:"), courierIdField, 
-            assignBtn, msgLabel
-        );
+        formBox.getChildren().addAll(new Label("Courier:"), courierCombo, assignBtn);
+        layout.getChildren().addAll(title, info, tableOrder, formBox, msgLabel);
         return layout;
+    }
+    
+    // Refresh table order (ambil order yang belum di-assign)
+    private void refreshOrderTable() {
+        tableOrder.setItems(FXCollections.observableArrayList(adminController.getAllUnassignedOrders()));
+    }
+    
+    // Refresh ComboBox courier
+    private void refreshCourierCombo() {
+        courierCombo.setItems(FXCollections.observableArrayList(adminController.getAllCouriers()));
     }
 }

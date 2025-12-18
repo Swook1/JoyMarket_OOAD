@@ -121,7 +121,7 @@ public class CourierDashboardView {
                 courier.getIdUser(),
                 status
         );
-
+        
         msgLabel.setText(res);
         msgLabel.setStyle(res.startsWith("Success") ? "-fx-text-fill: green;" : "-fx-text-fill: red;");
         refreshTable();
