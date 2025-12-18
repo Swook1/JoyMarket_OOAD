@@ -19,7 +19,6 @@ public class CustomerDashboardView {
         this.stage = stage;
         this.customer = customer;
         this.customerController = new CustomerController();
-
         initUI();
     }
 
@@ -34,11 +33,20 @@ public class CustomerDashboardView {
         Label addressLabel = new Label("Address: " + customer.getAddress());
         Label balanceLabel = new Label("Balance: " + customer.getBalance());
 
+        Button browseProductBtn = new Button("Browse Products");
+        Button cartBtn = new Button("My Cart");
         Button editProfileBtn = new Button("Edit Profile");
         Button topUpBtn = new Button("Top Up Balance");
         Button logoutBtn = new Button("Logout");
 
-        // === EVENT HANDLER ===
+        browseProductBtn.setOnAction(e -> {
+            new ProductListView(stage, customer);
+        });
+
+        cartBtn.setOnAction(e -> {
+            new CartView(stage, customer);
+        });
+
         editProfileBtn.setOnAction(e -> {
             new EditProfileView(stage, customer);
         });
@@ -60,12 +68,14 @@ public class CustomerDashboardView {
                 phoneLabel,
                 addressLabel,
                 balanceLabel,
+                browseProductBtn,
+                cartBtn,
                 editProfileBtn,
                 topUpBtn,
                 logoutBtn
         );
 
-        stage.setScene(new Scene(root, 400, 400));
+        stage.setScene(new Scene(root, 400, 500));
         stage.setTitle("Customer Dashboard");
         stage.show();
     }
