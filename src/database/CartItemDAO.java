@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import model.*;
 
@@ -59,4 +60,69 @@ public class CartItemDAO {
 	        }
 	        return false;
 	 }
+	 
+	 public ResultSet getCartItemsByCustomer(int idCustomer) {
+		    String sql =
+		        "SELECT c.idProduct, p.name, p.price, c.count " +
+		        "FROM cartitems c " +
+		        "JOIN products p ON c.idProduct = p.idProduct " +
+		        "WHERE c.idCustomer = ?";
+
+		    try {
+		        Connection con = DBConnection.getConnection();
+		        PreparedStatement ps = con.prepareStatement(sql);
+		        ps.setInt(1, idCustomer);
+		        return ps.executeQuery();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return null;
+		}
+	 
+	// ===============================
+	// FOR CHECKOUT PROCESS
+	// ===============================
+
+	 public ArrayList<CartItem> getCartItemsForCheckout(int idCustomer) {
+		    ArrayList<CartItem> items = new ArrayList<>();
+
+		    String sql = "SELECT idProduct, count FROM cartitems WHERE idCustomer = ?";
+
+		    try (Connection con = DBConnection.getConnection();
+		         PreparedStatement ps = con.prepareStatement(sql)) {
+
+		        ps.setInt(1, idCustomer);
+		        ResultSet rs = ps.executeQuery();
+
+		        while (rs.next()) {
+		            items.add(new CartItem(
+		                    idCustomer,
+		                    rs.getInt("idProduct"),
+		                    rs.getInt("count")
+		            ));
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+
+		    return items;
+		}
+
+
+	public boolean clearCart(int idCustomer) {
+	    String sql = "DELETE FROM cartitems WHERE idCustomer = ?";
+
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, idCustomer);
+	        return ps.executeUpdate() > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
 }
